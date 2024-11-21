@@ -1,4 +1,4 @@
-using DashApi.Dtos;
+using DashApi.Dtos.User;
 using DashApi.Models;
 
 namespace DashApi.Mappers
@@ -11,7 +11,19 @@ namespace DashApi.Mappers
             {
                 Id = userModel.Id,
                 Username = userModel.Username,
-                CreatedOn = userModel.CreatedOn
+                Email = userModel.Email,
+                CreatedOn = userModel.CreatedOn,
+                LastOnline = userModel.LastOnline
+            };
+        }
+
+        public static User ToUserFromDto(this CreateUserDto userDto)
+        {
+            return new User
+            {
+                Username = userDto.Username,
+                PasswordHash = userDto.PasswordHash,
+                Email = userDto.Email
             };
         }
     }
