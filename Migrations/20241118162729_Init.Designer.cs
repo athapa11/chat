@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DashApi.Migrations
 {
     [DbContext(typeof(DashDbContext))]
-    [Migration("20241109211016_init")]
-    partial class init
+    [Migration("20241118162729_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,51 @@ namespace DashApi.Migrations
                     b.ToTable("Card");
                 });
 
+            modelBuilder.Entity("DashApi.Models.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChatName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chat");
+                });
+
+            modelBuilder.Entity("DashApi.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("Message");
+                });
+
             modelBuilder.Entity("DashApi.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -60,7 +105,7 @@ namespace DashApi.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -80,6 +125,20 @@ namespace DashApi.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DashApi.Models.Message", b =>
+                {
+                    b.HasOne("DashApi.Models.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId");
+
+                    b.Navigation("Chat");
+                });
+
+            modelBuilder.Entity("DashApi.Models.Chat", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("DashApi.Models.User", b =>

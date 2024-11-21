@@ -7,5 +7,6 @@ namespace DashApi.Models
         public string PasswordHash { get; set; } = string.Empty;
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public List<Card> Card { get; set; } = new List<Card>();
+        public string Email { get; set; } = string.Empty;
     }
 }

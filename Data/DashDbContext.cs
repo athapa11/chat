@@ -10,10 +10,9 @@ namespace DashApi.Data
         {
             
         }
-
         public DbSet<User> User { get; set; }
         public DbSet<Card> Card { get; set; }
-
-        public DbSet<Login> Login { get; set; }
+        public DbSet<Chat> Chat { get; set; }
+        public DbSet<Message> Message { get; set; }
     }
 }
