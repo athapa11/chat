@@ -2,3 +2,8 @@ bin/
 obj/
 .vscode/
 *.http
+.vs/
+Properties/
+appsettings.json
+appsettings.Development.json
+DashApi.sln
