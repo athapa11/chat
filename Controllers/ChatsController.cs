@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DashApi.Data;
@@ -16,32 +11,31 @@ namespace DashApi.Controllers
     {
         private readonly DashDbContext _context;
 
-        public ChatsController(DashDbContext context){
-            _context = context;
-        }
+        public ChatsController(DashDbContext context){ _context = context; }
 
         // get all chats
         [HttpGet]
-        public IActionResult GetAll() {
+        public IActionResult GetAll() 
+        {
             var chats = _context.Chat.ToList();
             return Ok(chats);
         }
 
         // get each chat
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id){
+        public IActionResult GetById([FromRoute] int id)
+        {
             var chat = _context.Chat.Find(id);
-
             if(chat == null){
                 return NotFound();
             }
-
             return Ok(chat);
         }
 
         // get all messages from a chat
         [HttpGet("{chatId}/messages")]
-        public IActionResult GetMessagesByChatId([FromRoute] int chatId){
+        public IActionResult GetMessagesByChatId([FromRoute] int chatId)
+        {
             var messages = _context.Message
                 .Where(m => m.ChatId == chatId)
                 .ToList();

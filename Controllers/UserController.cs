@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DashApi.Data;
 using Microsoft.AspNetCore.Mvc;
-using DashApi.Models;
 using DashApi.Mappers;
 using DashApi.Dtos.User;
 
@@ -16,9 +11,7 @@ namespace DashApi.Controllers
     {
         private readonly DashDbContext _context;
 
-        public UserController(DashDbContext context){
-            _context = context;
-        }
+        public UserController(DashDbContext context){ _context = context; }
 
         // get all users
         [HttpGet]

@@ -12,6 +12,6 @@ namespace DashApi.Models
         public DateTime LastOnline { get; set; } = DateTime.Now;
 
         // relationship
-        // public List<Chat> Chats { get; set; } = new List<Chat>();
+        public List<Chat> Chats { get; set; } = new List<Chat>();
     }
 }

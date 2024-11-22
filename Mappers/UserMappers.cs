@@ -5,6 +5,7 @@ namespace DashApi.Mappers
 {
     public static class UserMappers
     {
+        // map user to userDto
         public static UserDto ToUserDto(this User userModel)
         {
             return new UserDto
@@ -17,6 +18,7 @@ namespace DashApi.Mappers
             };
         }
 
+        // map createDto to user to post
         public static User ToUserFromDto(this CreateUserDto userDto)
         {
             return new User

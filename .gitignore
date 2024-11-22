@@ -7,3 +7,4 @@ Properties/
 appsettings.json
 appsettings.Development.json
 DashApi.sln
+.fake
