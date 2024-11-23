@@ -7,15 +7,15 @@ namespace DashApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly DashDbContext _context;
 
-        public UserController(DashDbContext context){ _context = context; }
+        public UsersController(DashDbContext context){ _context = context; }
 
         // get all users
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAllUsers()
         {
             var users = _context.User
                 .Select(u => u.ToUserDto())
@@ -26,7 +26,7 @@ namespace DashApi.Controllers
 
         // get specific user
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public IActionResult GetUserById([FromRoute] int id)
         {
             var user = _context.User.Find(id);
 
@@ -47,10 +47,18 @@ namespace DashApi.Controllers
 
             return CreatedAtAction
             (
-                nameof(GetById),
+                nameof(GetUserById),
                 new {id = userModel.Id},
                 userModel.ToUserDto()
             );
         }
+
+        // edit user
+        // [HttpPut]
+        // [Route("{id}")]
+        // public IActionResult EditUser([FromRoute] int id, [FromBody] )
+        // {
+
+        // }
     }
 }

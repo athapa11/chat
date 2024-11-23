@@ -8,6 +8,7 @@ namespace DashApi.Models
 
         // activity
         public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public Boolean Edited { get; set; } = false;
 
 
         // relationship
