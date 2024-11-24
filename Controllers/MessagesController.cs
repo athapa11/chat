@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using DashApi.Data;
 using DashApi.Dtos.Message;
 using DashApi.Mappers;
+using DashApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DashApi.Controllers
 {
@@ -26,48 +28,53 @@ namespace DashApi.Controllers
         //     return Ok(messages);
         // }
 
+
         // get all messages
         [HttpGet]
-        public IActionResult GetAllMessages()
+        public async Task<IActionResult> GetAllMessages()
         {
-            var messages = _context.Message.ToList();
+            var messages = await _context.Message.ToListAsync();
+
             return Ok(messages);
         }
 
+
         // get message by id
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var message = _context.Message.Find(id);
-            if(message == null)
-            { 
+            var message = await _context.Message.FindAsync(id);
+
+            if(message == null){ 
                 return NotFound(); 
             }
+
             return Ok(message);
         }
 
+
         // create message
         [HttpPost]
-        public IActionResult CreateMessage([FromBody] CreateMessageDto messageDto)
+        public async Task<IActionResult> CreateMessage([FromBody] CreateMessageDto messageDto)
         {
             var messageModel = messageDto.ToMessageFromDto();
-            _context.Message.Add(messageModel);
-            _context.SaveChanges();
+            await _context.Message.AddAsync(messageModel);
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction
-            (
+            return CreatedAtAction(
                 nameof(GetById),
                 new {id = messageModel.Id},
                 messageModel
             );
         }
 
+
         // Edit message body
         [HttpPut]
         [Route("{id}")]
-        public IActionResult EditMessage([FromRoute] int id, [FromBody] EditMessageDto editDto)
+        public async Task<IActionResult> EditMessage([FromRoute] int id, [FromBody] EditMessageDto editDto)
         {
-            var message = _context.Message.FirstOrDefault(
+            var message = await _context.Message.FirstOrDefaultAsync(
                 x => x.Id == id);
 
             if(message == null)
@@ -76,17 +83,18 @@ namespace DashApi.Controllers
             }
             message.Content = editDto.Content;
             message.Edited = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(message);
         }
 
+
         // Delete message
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult DeleteMessage([FromRoute] int id)
+        public async Task<IActionResult> DeleteMessage([FromRoute] int id)
         { 
-            var message = _context.Message.FirstOrDefault(
+            var message = await _context.Message.FirstOrDefaultAsync(
                 x => x.Id == id
             );
 
@@ -95,7 +103,7 @@ namespace DashApi.Controllers
             }
 
             _context.Message.Remove(message);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

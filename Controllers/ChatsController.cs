@@ -18,17 +18,17 @@ namespace DashApi.Controllers
 
         // get all chats
         [HttpGet]
-        public IActionResult GetChatsByUser()
+        public async Task<IActionResult> GetChatsByUser()
         {
-            var chats = _context.Chat.ToList();
+            var chats = await _context.Chat.ToListAsync();
             return Ok(chats);
         }
 
         // get chat by id
         [HttpGet("{id}")]
-        public IActionResult GetChatById([FromRoute] int id)
+        public async Task<IActionResult> GetChatById([FromRoute] int id)
         {
-            var chat = _context.Chat.Find(id);
+            var chat = await _context.Chat.FindAsync(id);
 
             if(chat == null)
             {

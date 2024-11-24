@@ -2,6 +2,7 @@ using DashApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using DashApi.Mappers;
 using DashApi.Dtos.User;
+using Microsoft.EntityFrameworkCore;
 
 namespace DashApi.Controllers
 {
@@ -15,20 +16,20 @@ namespace DashApi.Controllers
 
         // get all users
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            var users = _context.User
+            var users = await _context.User
                 .Select(u => u.ToUserDto())
-                .ToList();
+                .ToListAsync();
             
             return Ok(users);
         }
 
         // get specific user
         [HttpGet("{id}")]
-        public IActionResult GetUserById([FromRoute] int id)
+        public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
-            var user = _context.User.Find(id);
+            var user = await _context.User.FindAsync(id);
 
             if(user == null){
                 return NotFound();
@@ -39,11 +40,11 @@ namespace DashApi.Controllers
 
         // register user
         [HttpPost]
-        public IActionResult CreateUser([FromBody] CreateUserDto userDto)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
         {
             var userModel = userDto.ToUserFromDto();
-            _context.User.Add(userModel);
-            _context.SaveChanges();
+            await _context.User.AddAsync(userModel);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction
             (
