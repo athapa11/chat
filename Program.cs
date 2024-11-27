@@ -1,4 +1,6 @@
 using DashApi.Data;
+using DashApi.Interfaces;
+using DashApi.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,8 @@ builder.Services.AddDbContext<DashDbContext>(
     opt => opt
     .UseSqlServer(connectionString)
 );
+
+builder.Services.AddScoped<IMessageRepo, MessageRepo>();
 
 var app = builder.Build();
 

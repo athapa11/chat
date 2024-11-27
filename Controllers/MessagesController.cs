@@ -4,6 +4,7 @@ using DashApi.Dtos.Message;
 using DashApi.Mappers;
 using DashApi.Models;
 using Microsoft.EntityFrameworkCore;
+using DashApi.Interfaces;
 
 namespace DashApi.Controllers
 {
@@ -12,28 +13,20 @@ namespace DashApi.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly DashDbContext _context;
+        private readonly IMessageRepo _repo;
 
-        public MessagesController(DashDbContext context)
+        public MessagesController(DashDbContext context, IMessageRepo repo)
         { 
             _context = context; 
+            _repo = repo;
         }
-
-        // get all messages from a chat
-        // [HttpGet]
-        // public IActionResult GetMessagesByChatId([FromQuery] int chatId)
-        // {
-        //     var messages = _context.Message
-        //         .Where(m => m.ChatId == chatId)
-        //         .ToList();
-        //     return Ok(messages);
-        // }
 
 
         // get all messages
         [HttpGet]
-        public async Task<IActionResult> GetAllMessages()
+        public async Task<IActionResult> GetAll()
         {
-            var messages = await _context.Message.ToListAsync();
+            var messages = await _repo.GetAllAsync();
 
             return Ok(messages);
         }
@@ -43,7 +36,7 @@ namespace DashApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var message = await _context.Message.FindAsync(id);
+            var message = await _repo.GetByIdAsync(id);
 
             if(message == null){ 
                 return NotFound(); 
@@ -55,16 +48,15 @@ namespace DashApi.Controllers
 
         // create message
         [HttpPost]
-        public async Task<IActionResult> CreateMessage([FromBody] CreateMessageDto messageDto)
+        public async Task<IActionResult> Create([FromBody] CreateMessageDto messageDto)
         {
-            var messageModel = messageDto.ToMessageFromDto();
-            await _context.Message.AddAsync(messageModel);
-            await _context.SaveChangesAsync();
+            var message = messageDto.ToMessageFromDto();
+            await _repo.CreateMessageAsync(message);
 
             return CreatedAtAction(
                 nameof(GetById),
-                new {id = messageModel.Id},
-                messageModel
+                new {id = message.Id},
+                message
             );
         }
 
@@ -72,18 +64,14 @@ namespace DashApi.Controllers
         // Edit message body
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> EditMessage([FromRoute] int id, [FromBody] EditMessageDto editDto)
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] EditMessageDto dto)
         {
-            var message = await _context.Message.FirstOrDefaultAsync(
-                x => x.Id == id);
+            var message = await _repo.EditMessageAsync(id, dto);
 
             if(message == null)
             { 
                 return NotFound(); 
             }
-            message.Content = editDto.Content;
-            message.Edited = true;
-            await _context.SaveChangesAsync();
 
             return Ok(message);
         }
@@ -92,18 +80,13 @@ namespace DashApi.Controllers
         // Delete message
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteMessage([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         { 
-            var message = await _context.Message.FirstOrDefaultAsync(
-                x => x.Id == id
-            );
+            var message = await _repo.DeleteMessageAsync(id);
 
             if(message == null){
                 return NotFound();
             }
-
-            _context.Message.Remove(message);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
