@@ -13,7 +13,7 @@ namespace DashApi.Interfaces
 
         Task<Message?> GetByIdAsync(int id);
 
-        Task<Message> CreateMessageAsync(Message dto);
+        Task<Message> CreateMessageAsync(Message chat);
 
         Task<Message?> EditMessageAsync(int id, EditMessageDto dto);
 

@@ -20,6 +20,7 @@ builder.Services.AddDbContext<DashDbContext>(
 );
 
 builder.Services.AddScoped<IMessageRepo, MessageRepo>();
+builder.Services.AddScoped<IChatRepo, ChatRepo>();
 
 var app = builder.Build();
 

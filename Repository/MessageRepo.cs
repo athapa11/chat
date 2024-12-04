@@ -8,6 +8,7 @@ using DashApi.Data;
 using Microsoft.EntityFrameworkCore;
 using DashApi.Dtos.Message;
 using Microsoft.AspNetCore.Http.HttpResults;
+using DashApi.Mappers;
 
 namespace DashApi.Repository
 {

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DashApi.Data;
 using DashApi.Models;
+using DashApi.Interfaces;
 
 namespace DashApi.Controllers
 {
@@ -9,34 +10,35 @@ namespace DashApi.Controllers
     [ApiController]
     public class ChatsController : ControllerBase
     {
-        private readonly DashDbContext _context;
+        private readonly IChatRepo _repo;
 
-        public ChatsController(DashDbContext context)
+        public ChatsController(IChatRepo repo)
         { 
-            _context = context; 
+            _repo = repo; 
         }
 
         // get all chats
         [HttpGet]
-        public async Task<IActionResult> GetChatsByUser()
+        public async Task<IActionResult> GetAllChats()
         {
-            var chats = await _context.Chat.ToListAsync();
+            var chats = await _repo.GetAllAsync();
+
             return Ok(chats);
         }
 
         // get chat by id
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetChatById([FromRoute] int id)
-        {
-            var chat = await _context.Chat.FindAsync(id);
+        // [HttpGet("{id}")]
+        // public async Task<IActionResult> GetChatById([FromRoute] int id)
+        // {
+        //     var chat = await _context.Chat.FindAsync(id);
 
-            if(chat == null)
-            {
-                return NotFound();
-            }
+        //     if(chat == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            return Ok(chat);
-        }
+        //     return Ok(chat);
+        // }
 
 
     //     // PUT: api/Chats/5

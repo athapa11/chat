@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using DashApi.Data;
 using DashApi.Dtos.Message;
 using DashApi.Mappers;
-using DashApi.Models;
-using Microsoft.EntityFrameworkCore;
 using DashApi.Interfaces;
 
 namespace DashApi.Controllers
@@ -12,12 +9,10 @@ namespace DashApi.Controllers
     [Route("api/[controller]")]
     public class MessagesController : ControllerBase
     {
-        private readonly DashDbContext _context;
         private readonly IMessageRepo _repo;
 
-        public MessagesController(DashDbContext context, IMessageRepo repo)
+        public MessagesController(IMessageRepo repo)
         { 
-            _context = context; 
             _repo = repo;
         }
 
@@ -27,8 +22,9 @@ namespace DashApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var messages = await _repo.GetAllAsync();
+            var messagesDto = messages.Select(s => s.ToMessageDto());
 
-            return Ok(messages);
+            return Ok(messagesDto);
         }
 
 
@@ -38,8 +34,8 @@ namespace DashApi.Controllers
         {
             var message = await _repo.GetByIdAsync(id);
 
-            if(message == null){ 
-                return NotFound(); 
+            if(message == null){
+                return NotFound();
             }
 
             return Ok(message);
