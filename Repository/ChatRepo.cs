@@ -13,32 +13,32 @@ namespace DashApi.Repository
     {
         private readonly DashDbContext _context;
 
-        public ChatRepo(DashDbContext context)
-        {
+        public ChatRepo(DashDbContext context){
             _context = context;
         }
 
-        public async Task<List<Chat>> GetAllAsync()
-        {
+        public async Task<List<Chat>> GetAllAsync(){
             return await _context.Chat.ToListAsync();
         }
 
-        public Task<Chat?> GetByIdAsync(int id)
-        {
-            //return await _context.Chat.FirstOrDefaultAsync(x => x.Id == x.id);
-            throw new NotImplementedException();
+
+        public async Task<Chat?> GetByIdAsync(int id){
+            return await _context.Chat.FindAsync(id);
         }
 
-        public Task<Chat> CreateChatAsync(Chat chat)
-        {
-            //var chat = _context.
-            throw new NotImplementedException();
-        }
+
+        // public async Task<Chat> CreateChatAsync(Chat chat){
+        //     await _context.Chat.AddAsync(chat);
+        //     await _context.SaveChangesAsync();
+        //     return chat;
+        // }
+
 
         public Task<Chat?> DeleteChatAsync(int id)
         {
             throw new NotImplementedException();
         }
+
 
         public Task<Chat?> EditChatAsync(int id, Chat chat)
         {
