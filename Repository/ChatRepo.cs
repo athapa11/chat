@@ -27,11 +27,11 @@ namespace DashApi.Repository
         }
 
 
-        // public async Task<Chat> CreateChatAsync(Chat chat){
-        //     await _context.Chat.AddAsync(chat);
-        //     await _context.SaveChangesAsync();
-        //     return chat;
-        // }
+        public async Task<Chat> CreateChatAsync(Chat chat){
+            await _context.Chat.AddAsync(chat);
+            await _context.SaveChangesAsync();
+            return chat;
+        }
 
 
         public Task<Chat?> DeleteChatAsync(int id)

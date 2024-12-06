@@ -21,12 +21,14 @@ namespace DashApi.Mappers
             };
         }
 
-        // public static Chat ToChatFromDto(this ChatDto dto)
-        // {
-        //     return new Chat
-        //     {
-        //         ChatName = dto.ChatName
-        //     };
-        // }
+
+        // mapping for post request
+        public static Chat ToChatFromDto(this CreateChatDto dto)
+        {
+            return new Chat
+            {
+                ChatName = dto.ChatName
+            };
+        }
     }
 }

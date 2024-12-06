@@ -44,18 +44,18 @@ namespace DashApi.Controllers
 
 
         // create chat
-        // [HttpPost]
-        // public async Task<IActionResult> CreateChat([FromBody] ChatDto dto)
-        // {
-        //     var chat = dto.ToChatFromDto();
-        //     await _repo.CreateChatAsync(chat);
+        [HttpPost]
+        public async Task<IActionResult> CreateChat([FromBody] CreateChatDto dto)
+        {
+            var chat = dto.ToChatFromDto();
+            await _repo.CreateChatAsync(chat);
 
-        //     return CreatedAtAction
-        //     (
-        //         nameof(GetChatById),
-        //         new {id = chat.Id},
-        //         chat
-        //     );
-        // }
+            return CreatedAtAction
+            (
+                nameof(GetChatById),
+                new {id = chat.Id},
+                chat
+            );
+        }
     }
 }
