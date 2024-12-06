@@ -16,29 +16,24 @@ namespace DashApi.Repository
     {   
         private readonly DashDbContext _context;
 
-        public MessageRepo(DashDbContext context)
-        {
+        public MessageRepo(DashDbContext context){
             _context = context;
         }
 
 
-        public async Task<List<Message>> GetAllAsync()
-        {
+        public async Task<List<Message>> GetAllAsync(){
             return await _context.Message.ToListAsync();
         }
 
 
-        public async Task<Message?> GetByIdAsync(int id)
-        {
+        public async Task<Message?> GetByIdAsync(int id){
             return await _context.Message.FindAsync(id);
         }
 
 
-        public async Task<Message> CreateMessageAsync(Message message)
-        {
+        public async Task<Message> CreateMessageAsync(Message message){
             await _context.Message.AddAsync(message);
             await _context.SaveChangesAsync();
-            
             return message;
         }
 

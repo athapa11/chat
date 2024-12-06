@@ -19,6 +19,8 @@ namespace DashApi.Mappers
             };
         }
 
+        
+        // mapping for post request
         public static Message ToMessageFromDto(this CreateMessageDto messageDto)
         {
             return new Message

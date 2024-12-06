@@ -38,18 +38,19 @@ namespace DashApi.Controllers
                 return NotFound();
             }
 
-            return Ok(message);
+            return Ok(message.ToMessageDto());
         }
 
 
         // create message
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateMessageDto messageDto)
+        public async Task<IActionResult> CreateMessage([FromBody] CreateMessageDto messageDto)
         {
             var message = messageDto.ToMessageFromDto();
             await _repo.CreateMessageAsync(message);
 
-            return CreatedAtAction(
+            return CreatedAtAction
+            (
                 nameof(GetById),
                 new {id = message.Id},
                 message
