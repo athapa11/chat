@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DashApi.Data;
+using DashApi.Dtos.Chat;
 using DashApi.Interfaces;
+using DashApi.Mappers;
 using DashApi.Models;
 using Microsoft.EntityFrameworkCore;
 

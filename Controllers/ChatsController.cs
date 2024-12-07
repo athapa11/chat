@@ -24,8 +24,9 @@ namespace DashApi.Controllers
         public async Task<IActionResult> GetAllChats()
         {
             var chats = await _repo.GetAllAsync();
+            var chatsDto = chats.Select(chat => chat.ToChatDto());
 
-            return Ok(chats);
+            return Ok(chatsDto);
         }
 
         // get chat by id
