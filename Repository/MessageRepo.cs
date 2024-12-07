@@ -63,5 +63,10 @@ namespace DashApi.Repository
 
             return message;
         }
+
+        public Task<Message?> EditMessageAsync(int id, Message dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

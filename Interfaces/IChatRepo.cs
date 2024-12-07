@@ -18,5 +18,7 @@ namespace DashApi.Interfaces
         Task<Chat?> EditChatAsync(int id, Chat chat);
 
         Task<Chat?> DeleteChatAsync(int id);
+
+        Task<bool> ChatExists(int id);
     }
 }

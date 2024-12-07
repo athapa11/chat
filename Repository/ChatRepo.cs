@@ -44,5 +44,10 @@ namespace DashApi.Repository
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> ChatExists(int id)
+        {
+            return await _context.Chat.AnyAsync(s => s.Id == id);
+        }
     }
 }

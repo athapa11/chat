@@ -15,7 +15,7 @@ namespace DashApi.Interfaces
 
         Task<Message> CreateMessageAsync(Message message);
 
-        Task<Message?> EditMessageAsync(int id, EditMessageDto dto);
+        Task<Message?> EditMessageAsync(int id, Message dto);
 
         Task<Message?> DeleteMessageAsync(int id);
     }
