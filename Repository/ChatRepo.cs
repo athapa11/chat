@@ -20,12 +20,12 @@ namespace DashApi.Repository
         }
 
         public async Task<List<Chat>> GetAllAsync(){
-            return await _context.Chat.ToListAsync();
+            return await _context.Chat.Include(m => m.Messages).ToListAsync();
         }
 
 
         public async Task<Chat?> GetByIdAsync(int id){
-            return await _context.Chat.FindAsync(id);
+            return await _context.Chat.Include(m => m.Messages).FirstOrDefaultAsync(i => i.Id == id);
         }
 
 

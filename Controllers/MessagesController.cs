@@ -25,7 +25,7 @@ namespace DashApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var messages = await _messageRepo.GetAllAsync();
-            var messagesDto = messages.Select(s => s.ToMessageDto());
+            var messagesDto = messages.Select(message => message.ToMessageDto());
             return Ok(messagesDto);
         }
 
