@@ -38,7 +38,7 @@ namespace DashApi.Repository
         }
 
 
-        public async Task<Message?> EditMessageAsync(int id, EditMessageDto dto)
+        public async Task<Message?> EditMessageAsync(int id, Message dto)
         {
             var message = await _context.Message.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -62,11 +62,6 @@ namespace DashApi.Repository
             await _context.SaveChangesAsync();
 
             return message;
-        }
-
-        public Task<Message?> EditMessageAsync(int id, Message dto)
-        {
-            throw new NotImplementedException();
         }
     }
 }

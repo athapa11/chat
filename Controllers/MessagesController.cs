@@ -54,32 +54,32 @@ namespace DashApi.Controllers
                 BadRequest("CHAT DOESN'T EXIST");
             }
 
-            var message = messageDto.ToMessageFromDto(chatId);
+            var message = messageDto.ToMessageFromCreate(chatId);
             await _messageRepo.CreateMessageAsync(message);
 
             return CreatedAtAction
             (
                 nameof(GetById),
-                new {id = message},
+                new {id = message.Id},
                 message.ToMessageDto()
             );
         }
 
 
         // Edit message body
-        // [HttpPut]
-        // [Route("{id}")]
-        // public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] EditMessageDto dto)
-        // {
-        //     var message = await _messageRepo.EditMessageAsync(id, dto);
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] EditMessageDto dto)
+        {
+            var message = await _messageRepo.EditMessageAsync(id, dto.ToMessageFromUpdate());
 
-        //     if(message == null)
-        //     {
-        //         return NotFound();
-        //     }
+            if(message == null)
+            {
+                return NotFound("Message not found");
+            }
 
-        //     return Ok(message);
-        // }
+            return Ok(message.ToMessageDto());
+        }
 
 
         // Delete message

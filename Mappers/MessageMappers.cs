@@ -18,11 +18,19 @@ namespace DashApi.Mappers
         }
 
         
-        // mapping for post request
-        public static Message ToMessageFromDto(this CreateMessageDto messageDto, int chatId){
+        // for post request
+        public static Message ToMessageFromCreate(this CreateMessageDto messageDto, int chatId){
             return new Message{
                 Content = messageDto.Content,
                 ChatId = chatId
+            };
+        }
+
+
+        // for put request
+        public static Message ToMessageFromUpdate(this EditMessageDto dto){
+            return new Message{
+                Content = dto.Content
             };
         }
     }
