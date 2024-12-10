@@ -12,18 +12,18 @@ namespace DashApi.Controllers
     [ApiController]
     public class ChatsController : ControllerBase
     {
-        private readonly IChatRepo _repo;
+        private readonly IChatRepo _chatRepo;
 
-        public ChatsController(IChatRepo repo)
+        public ChatsController(IChatRepo chatRepo)
         { 
-            _repo = repo; 
+            _chatRepo = chatRepo; 
         }
 
         // get all chats
         [HttpGet]
         public async Task<IActionResult> GetAllChats()
         {
-            var chats = await _repo.GetAllAsync();
+            var chats = await _chatRepo.GetAllAsync();
             var chatsDto = chats.Select(chat => chat.ToChatDto());
 
             return Ok(chatsDto);
@@ -33,7 +33,7 @@ namespace DashApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChatById([FromRoute] int id)
         {
-            var chat = await _repo.GetByIdAsync(id);
+            var chat = await _chatRepo.GetByIdAsync(id);
 
             if(chat == null)
             {
@@ -48,8 +48,8 @@ namespace DashApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateChat([FromBody] CreateChatDto dto)
         {
-            var chat = dto.ToChatFromDto();
-            await _repo.CreateChatAsync(chat);
+            var chat = dto.ToChatFromCreate();
+            await _chatRepo.CreateChatAsync(chat);
 
             return CreatedAtAction
             (
@@ -57,6 +57,20 @@ namespace DashApi.Controllers
                 new {id = chat.Id},
                 chat
             );
+        }
+
+
+        // edit chat
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditChat([FromRoute] int id, [FromBody] EditChatDto dto)
+        {
+            var chat = await _chatRepo.EditChatAsync(id, dto.ToChatFromUpdate());
+
+            if(chat == null){
+                return NotFound("Chat not found");
+            }
+
+            return Ok(chat);
         }
     }
 }

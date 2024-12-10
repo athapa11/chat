@@ -9,10 +9,8 @@ namespace DashApi.Mappers
 {
     public static class ChatMappers
     {
-        public static ChatDto ToChatDto(this Chat chatModel)
-        {
-            return new ChatDto
-            {
+        public static ChatDto ToChatDto(this Chat chatModel){
+            return new ChatDto{
                 Id = chatModel.Id,
                 ChatName = chatModel.ChatName,
                 CreatedOn = chatModel.CreatedOn,
@@ -22,11 +20,17 @@ namespace DashApi.Mappers
         }
 
 
-        // mapping for post request
-        public static Chat ToChatFromDto(this CreateChatDto dto)
-        {
-            return new Chat
-            {
+        // for post request
+        public static Chat ToChatFromCreate(this CreateChatDto dto){
+            return new Chat{
+                ChatName = dto.ChatName
+            };
+        }
+
+
+        // for put request
+        public static Chat ToChatFromUpdate(this EditChatDto dto){
+            return new Chat{
                 ChatName = dto.ChatName
             };
         }

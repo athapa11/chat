@@ -36,16 +36,24 @@ namespace DashApi.Repository
         }
 
 
+        public async Task<Chat?> EditChatAsync(int id, Chat dto)
+        {
+            var chat = await _context.Chat.FindAsync(id);
+
+            if(chat == null){ return null; }
+
+            chat.ChatName = dto.ChatName;
+            await _context.SaveChangesAsync();
+
+            return chat;
+        }
+
+
         public Task<Chat?> DeleteChatAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-
-        public Task<Chat?> EditChatAsync(int id, Chat chat)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<bool> ChatExists(int id)
         {
