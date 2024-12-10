@@ -24,6 +24,8 @@ namespace DashApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllChats()
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             var chats = await _chatRepo.GetAllAsync();
             var chatsDto = chats.Select(chat => chat.ToChatDto());
 
@@ -31,9 +33,11 @@ namespace DashApi.Controllers
         }
 
         // get chat by id
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetChatById([FromRoute] int id)
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             var chat = await _chatRepo.GetByIdAsync(id);
 
             if(chat == null)
@@ -49,6 +53,8 @@ namespace DashApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateChat([FromBody] CreateChatDto dto)
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             var chat = dto.ToChatFromCreate();
             await _chatRepo.CreateChatAsync(chat);
 
@@ -63,9 +69,11 @@ namespace DashApi.Controllers
 
         // edit chat
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> EditChat([FromRoute] int id, [FromBody] EditChatDto dto)
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             var chat = await _chatRepo.EditChatAsync(id, dto.ToChatFromUpdate());
 
             if(chat == null){
@@ -78,12 +86,15 @@ namespace DashApi.Controllers
 
         // delete chat
         [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> DeleteChat([FromRoute] int id){
+        [Route("{id:int}")]
+        public async Task<IActionResult> DeleteChat([FromRoute] int id)
+        {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+            
             var chat = await _chatRepo.DeleteChatAsync(id);
 
             if(chat == null){
-                return NotFound("Chat was not found");
+                return NotFound("Chat not found");
             }
 
             return NoContent();

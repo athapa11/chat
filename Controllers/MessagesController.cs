@@ -24,6 +24,8 @@ namespace DashApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             var messages = await _messageRepo.GetAllAsync();
             var messagesDto = messages.Select(message => message.ToMessageDto());
             return Ok(messagesDto);
@@ -31,9 +33,11 @@ namespace DashApi.Controllers
 
 
         // get message by id
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             var message = await _messageRepo.GetByIdAsync(id);
 
             if(message == null)
@@ -46,12 +50,14 @@ namespace DashApi.Controllers
 
 
         // create message
-        [HttpPost("{chatId}")]
+        [HttpPost("{chatId:int}")]
         public async Task<IActionResult> Create([FromRoute] int chatId, [FromBody] CreateMessageDto messageDto)
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             if(!await _chatRepo.ChatExists(chatId))
             {
-                BadRequest("CHAT DOESN'T EXIST");
+                BadRequest("Chat not found");
             }
 
             var message = messageDto.ToMessageFromCreate(chatId);
@@ -68,9 +74,11 @@ namespace DashApi.Controllers
 
         // Edit message body
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] EditMessageDto dto)
         {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
             var message = await _messageRepo.EditMessageAsync(id, dto.ToMessageFromUpdate());
 
             if(message == null)
@@ -84,9 +92,11 @@ namespace DashApi.Controllers
 
         // Delete message
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
-        { 
+        {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+            
             var message = await _messageRepo.DeleteMessageAsync(id);
 
             if(message == null){

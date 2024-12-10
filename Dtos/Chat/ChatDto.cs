@@ -7,7 +7,7 @@ using DashApi.Dtos.Message;
 namespace DashApi.Dtos.Chat
 {
     public class ChatDto
-    {
+    {   
         public int Id { get; set; }
         public string ChatName { get; set; } = string.Empty;
 
