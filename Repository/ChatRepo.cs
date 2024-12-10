@@ -49,9 +49,16 @@ namespace DashApi.Repository
         }
 
 
-        public Task<Chat?> DeleteChatAsync(int id)
+        public async Task<Chat?> DeleteChatAsync(int id)
         {
-            throw new NotImplementedException();
+            var chat = await _context.Chat.FirstOrDefaultAsync(i => i.Id == id);
+
+            if(chat == null){ return null; }
+
+            _context.Chat.Remove(chat);
+            await _context.SaveChangesAsync();
+
+            return chat;
         }
 
 

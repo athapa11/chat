@@ -5,6 +5,7 @@ using DashApi.Models;
 using DashApi.Interfaces;
 using DashApi.Mappers;
 using DashApi.Dtos.Chat;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DashApi.Controllers
 {
@@ -61,7 +62,8 @@ namespace DashApi.Controllers
 
 
         // edit chat
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("{id}")]
         public async Task<IActionResult> EditChat([FromRoute] int id, [FromBody] EditChatDto dto)
         {
             var chat = await _chatRepo.EditChatAsync(id, dto.ToChatFromUpdate());
@@ -70,7 +72,21 @@ namespace DashApi.Controllers
                 return NotFound("Chat not found");
             }
 
-            return Ok(chat);
+            return Ok(chat.ToChatDto());
+        }
+
+
+        // delete chat
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteChat([FromRoute] int id){
+            var chat = await _chatRepo.DeleteChatAsync(id);
+
+            if(chat == null){
+                return NotFound("Chat was not found");
+            }
+
+            return NoContent();
         }
     }
 }
