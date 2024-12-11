@@ -30,6 +30,14 @@ namespace DashApi.Repository
                 messages = messages.Where(s => s.Content.Contains(query.Content));
             }
 
+            // sort by new or old
+            if(!query.Old){
+                messages = messages.OrderByDescending(m => m.CreatedOn);
+            }
+            else{
+                messages = messages.OrderBy(m => m.CreatedOn);
+            }
+
             // pagination calculation
             var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
