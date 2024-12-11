@@ -25,11 +25,15 @@ namespace DashApi.Repository
         public async Task<List<Message>> GetAllAsync(MessageQuery query){
             var messages = _context.Message.AsQueryable();
 
+            // search by message content
             if(!string.IsNullOrWhiteSpace(query.Content)){
                 messages = messages.Where(s => s.Content.Contains(query.Content));
             }
 
-            return await messages.ToListAsync();
+            // pagination calculation
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+
+            return await messages.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
 
 
