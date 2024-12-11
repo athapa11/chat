@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using DashApi.Dtos.Message;
 using DashApi.Mappers;
 using DashApi.Interfaces;
+using DashApi.Queryables;
 
 namespace DashApi.Controllers
 {
@@ -22,11 +23,11 @@ namespace DashApi.Controllers
 
         // get all messages
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] MessageQuery query)
         {
             if(!ModelState.IsValid){ return BadRequest(ModelState); }
 
-            var messages = await _messageRepo.GetAllAsync();
+            var messages = await _messageRepo.GetAllAsync(query);
             var messagesDto = messages.Select(message => message.ToMessageDto());
             return Ok(messagesDto);
         }

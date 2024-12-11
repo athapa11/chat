@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using DashApi.Dtos.Message;
 using Microsoft.AspNetCore.Http.HttpResults;
 using DashApi.Mappers;
+using DashApi.Queryables;
 
 namespace DashApi.Repository
 {
@@ -21,8 +22,14 @@ namespace DashApi.Repository
         }
 
 
-        public async Task<List<Message>> GetAllAsync(){
-            return await _context.Message.ToListAsync();
+        public async Task<List<Message>> GetAllAsync(MessageQuery query){
+            var messages = _context.Message.AsQueryable();
+
+            if(!string.IsNullOrWhiteSpace(query.Content)){
+                messages = messages.Where(s => s.Content.Contains(query.Content));
+            }
+
+            return await messages.ToListAsync();
         }
 
 

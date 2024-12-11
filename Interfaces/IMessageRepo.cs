@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using DashApi.Dtos.Message;
 using DashApi.Models;
+using DashApi.Queryables;
 
 namespace DashApi.Interfaces
 {
     public interface IMessageRepo
     {
-        Task<List<Message>> GetAllAsync();
+        Task<List<Message>> GetAllAsync(MessageQuery query);
 
         Task<Message?> GetByIdAsync(int id);
 
