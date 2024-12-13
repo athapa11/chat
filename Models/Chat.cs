@@ -10,7 +10,5 @@ namespace DashApi.Models
 
         // relationships
         public List<Message> Messages { get; set; } = new List<Message>();
-        public int? UserId { get; set; }
-        public User? User { get; set; }
     }
 }

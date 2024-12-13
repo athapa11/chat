@@ -14,7 +14,6 @@ namespace DashApi.Mappers
                 Id = chatModel.Id,
                 ChatName = chatModel.ChatName,
                 CreatedOn = chatModel.CreatedOn,
-                UserId = chatModel.UserId,
                 Messages = chatModel.Messages.Select(m => m.ToMessageDto()).ToList()
             };
         }

@@ -12,8 +12,7 @@ namespace DashApi.Mappers
                 Content = messageModel.Content,
                 CreatedOn = messageModel.CreatedOn,
                 Edited = messageModel.Edited,
-                ChatId = messageModel.ChatId,
-                UserId = messageModel.UserId
+                ChatId = messageModel.ChatId
             };
         }
 
