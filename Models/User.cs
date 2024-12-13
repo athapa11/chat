@@ -1,12 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DashApi.Data;
+using Microsoft.AspNetCore.Identity;
+
 namespace DashApi.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-        public string Username { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-
         // activity
         public DateTime CreatedOn { get; set; } = DateTime.Now;
         public DateTime LastOnline { get; set; } = DateTime.Now;
