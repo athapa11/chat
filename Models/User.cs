@@ -9,11 +9,6 @@ namespace DashApi.Models
 {
     public class User : IdentityUser
     {
-        // activity
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
-        public DateTime LastOnline { get; set; } = DateTime.Now;
-
-        // relationship
-        public List<Chat> Chats { get; set; } = new List<Chat>();
+        
     }
 }

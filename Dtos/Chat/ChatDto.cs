@@ -16,7 +16,5 @@ namespace DashApi.Dtos.Chat
 
         // relationships
         public List<MessageDto>? Messages { get; set; }
-
-        public int? UserId { get; set; }
     }
 }
