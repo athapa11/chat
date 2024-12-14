@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using DashApi.Dtos.Account;
 using DashApi.Models;
+using DashApi.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NuGet.Protocol;
 
 namespace DashApi.Controllers
 {
@@ -15,10 +17,12 @@ namespace DashApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager)
+        public AccountController(UserManager<User> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -38,7 +42,7 @@ namespace DashApi.Controllers
 
                 if(createdUser.Succeeded)
                 {
-                    return Ok("User created");
+                    return Ok(_tokenService.CreateToken(user));
                 }
                 else
                 {
