@@ -2,6 +2,7 @@ using DashApi.Data;
 using DashApi.Interfaces;
 using DashApi.Models;
 using DashApi.Repository;
+using DashApi.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -57,9 +58,10 @@ builder.Services.AddAuthentication(options => {
 });
 
 
-// register repositories
+// register repositories and services
 builder.Services.AddScoped<IMessageRepo, MessageRepo>();
 builder.Services.AddScoped<IChatRepo, ChatRepo>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 
 var app = builder.Build();
