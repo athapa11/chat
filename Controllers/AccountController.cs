@@ -7,6 +7,7 @@ using DashApi.Models;
 using DashApi.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NuGet.Protocol;
 
@@ -18,11 +19,13 @@ namespace DashApi.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly SignInManager<User> _signinManager;
 
-        public AccountController(UserManager<User> userManager, ITokenService tokenService)
+        public AccountController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signinManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signinManager = signinManager;
         }
 
         [HttpPost("register")]
@@ -52,8 +55,30 @@ namespace DashApi.Controllers
             } catch (Exception e) // any random errors
             {   
                 Console.Error.Write(e);
-                return StatusCode(500, "rip");
+                return StatusCode(500, "rip bozo");
             }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(n => n.UserName == loginDto.Username);
+
+            if(user == null){
+
+                return Unauthorized("Invalid Username");
+
+            }
+
+            var res = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+            if(!res.Succeeded){
+                return Unauthorized("Invalid Username or password");
+            }
+
+            return Ok(_tokenService.CreateToken(user));
         }
     }
 }
