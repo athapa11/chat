@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DashApi.Models
 {
     public class Chat
@@ -10,5 +12,6 @@ namespace DashApi.Models
 
         // relationships
         public List<Message> Messages { get; set; } = new List<Message>();
+        public List<UserChat> UserChats { get; set; } = new List<UserChat>();
     }
 }

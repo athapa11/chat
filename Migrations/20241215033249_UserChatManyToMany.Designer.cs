@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DashApi.Migrations
 {
     [DbContext(typeof(DashDbContext))]
-    [Migration("20241214000625_RemovedNonIdentityProps")]
-    partial class RemovedNonIdentityProps
+    [Migration("20241215033249_UserChatManyToMany")]
+    partial class UserChatManyToMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,6 +136,21 @@ namespace DashApi.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("DashApi.Models.UserChat", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ChatId");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("UserChats");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -280,6 +295,25 @@ namespace DashApi.Migrations
                     b.Navigation("Chat");
                 });
 
+            modelBuilder.Entity("DashApi.Models.UserChat", b =>
+                {
+                    b.HasOne("DashApi.Models.Chat", "Chat")
+                        .WithMany("UserChats")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DashApi.Models.User", "User")
+                        .WithMany("UserChats")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -334,6 +368,13 @@ namespace DashApi.Migrations
             modelBuilder.Entity("DashApi.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("UserChats");
+                });
+
+            modelBuilder.Entity("DashApi.Models.User", b =>
+                {
+                    b.Navigation("UserChats");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,6 +9,6 @@ namespace DashApi.Models
 {
     public class User : IdentityUser
     {
-        
+        public List<UserChat> UserChats { get; set; } = new List<UserChat>();
     }
 }
