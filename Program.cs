@@ -88,6 +88,7 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<IMessageRepo, MessageRepo>();
 builder.Services.AddScoped<IChatRepo, ChatRepo>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserChatsRepo, UserChatsRepo>();
 
 
 var app = builder.Build();
