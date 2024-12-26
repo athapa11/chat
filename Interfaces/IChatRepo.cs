@@ -12,6 +12,8 @@ namespace DashApi.Interfaces
     {
         Task<List<Chat>> GetAllAsync();
 
+        Task<List<Chat>> GetUserChatsAsync(User user);
+
         Task<Chat?> GetByIdAsync(int id);
 
         Task<Chat> CreateChatAsync(Chat chat);

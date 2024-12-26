@@ -6,34 +6,55 @@ using DashApi.Interfaces;
 using DashApi.Mappers;
 using DashApi.Dtos.Chat;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using DashApi.Extensions;
 
 namespace DashApi.Controllers
-{
+{   
     [Route("api/[controller]")]
     [ApiController]
     public class ChatsController : ControllerBase
     {
         private readonly IChatRepo _chatRepo;
+        private readonly UserManager<User> _userManager;
 
-        public ChatsController(IChatRepo chatRepo)
+        public ChatsController(IChatRepo chatRepo, UserManager<User> userManager)
         { 
-            _chatRepo = chatRepo; 
+            _userManager = userManager;
+            _chatRepo = chatRepo;
         }
+
 
         // get all chats
+        // [HttpGet]
+        // public async Task<IActionResult> GetAllChats()
+        // {
+        //     if(!ModelState.IsValid){ return BadRequest(ModelState); }
+
+        //     var chats = await _chatRepo.GetAllAsync();
+        //     var chatsDto = chats.Select(chat => chat.ToChatDto());
+
+        //     return Ok(chatsDto);
+        // }
+
+
+        // get user specific chats
         [HttpGet]
-        public async Task<IActionResult> GetAllChats()
+        [Authorize]
+        public async Task<IActionResult> GetAllUserChats()
         {
-            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+            var chats = await _chatRepo.GetUserChatsAsync(user);
 
-            var chats = await _chatRepo.GetAllAsync();
-            var chatsDto = chats.Select(chat => chat.ToChatDto());
-
-            return Ok(chatsDto);
+            return Ok(chats);
         }
 
-        // get chat by id
+
+        // get chat by id (all)
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetChatById([FromRoute] int id)
         {
             if(!ModelState.IsValid){ return BadRequest(ModelState); }
@@ -49,8 +70,9 @@ namespace DashApi.Controllers
         }
 
 
-        // create chat
+        // create chat (creator only)
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateChat([FromBody] CreateChatDto dto)
         {
             if(!ModelState.IsValid){ return BadRequest(ModelState); }
@@ -67,8 +89,9 @@ namespace DashApi.Controllers
         }
 
 
-        // edit chat
+        // edit chat (all)
         [HttpPut]
+        [Authorize]
         [Route("{id:int}")]
         public async Task<IActionResult> EditChat([FromRoute] int id, [FromBody] EditChatDto dto)
         {
@@ -84,8 +107,9 @@ namespace DashApi.Controllers
         }
 
 
-        // delete chat
+        // delete chat (creator only)
         [HttpDelete]
+        [Authorize]
         [Route("{id:int}")]
         public async Task<IActionResult> DeleteChat([FromRoute] int id)
         {

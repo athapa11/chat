@@ -19,6 +19,19 @@ namespace DashApi.Repository
             _context = context;
         }
 
+        // get all cahts associated with user
+        public async Task<List<Chat>> GetUserChatsAsync(User user)
+        {
+            return await _context.UserChats.Where(u => u.UserId == user.Id)
+                .Select(chat => new Chat
+                {
+                    Id = chat.ChatId,
+                    ChatName = chat.Chat.ChatName,
+                    CreatedOn = chat.Chat.CreatedOn,
+                })
+                .ToListAsync();
+        }
+
         public async Task<List<Chat>> GetAllAsync(){
             return await _context.Chat.Include(m => m.Messages).ToListAsync();
         }
