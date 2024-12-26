@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DashApi.Migrations
 {
     /// <inheritdoc />
-    public partial class UserChatManyToMany : Migration
+    public partial class please : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -179,11 +179,18 @@ namespace DashApi.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Edited = table.Column<bool>(type: "bit", nullable: false),
-                    ChatId = table.Column<int>(type: "int", nullable: true)
+                    ChatId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Message", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Message_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Message_Chat_ChatId",
                         column: x => x.ChatId,
@@ -258,6 +265,11 @@ namespace DashApi.Migrations
                 name: "IX_Message_ChatId",
                 table: "Message",
                 column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_UserId",
+                table: "Message",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserChats_ChatId",

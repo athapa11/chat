@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DashApi.Migrations
 {
     [DbContext(typeof(DashDbContext))]
-    [Migration("20241215033249_UserChatManyToMany")]
-    partial class UserChatManyToMany
+    [Migration("20241226204919_please")]
+    partial class please
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,9 +66,15 @@ namespace DashApi.Migrations
                     b.Property<bool>("Edited")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Message");
                 });
@@ -292,7 +298,15 @@ namespace DashApi.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("ChatId");
 
+                    b.HasOne("DashApi.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Chat");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DashApi.Models.UserChat", b =>

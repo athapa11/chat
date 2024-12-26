@@ -10,12 +10,11 @@ namespace DashApi.Interfaces
 {
     public interface IChatRepo
     {
-        Task<List<Chat>> GetAllAsync();
-
         Task<List<Chat>> GetUserChatsAsync(User user);
 
         Task<Chat?> GetByIdAsync(int id);
 
+        Task<UserChat> CreateAssociationAsync(UserChat userChat);
         Task<Chat> CreateChatAsync(Chat chat);
 
         Task<Chat?> EditChatAsync(int id, Chat chat);

@@ -32,20 +32,23 @@ namespace DashApi.Repository
                 .ToListAsync();
         }
 
-        public async Task<List<Chat>> GetAllAsync(){
-            return await _context.Chat.Include(m => m.Messages).ToListAsync();
-        }
-
-
         public async Task<Chat?> GetByIdAsync(int id){
             return await _context.Chat.Include(m => m.Messages).FirstOrDefaultAsync(i => i.Id == id);
         }
 
 
-        public async Task<Chat> CreateChatAsync(Chat chat){
+        public async Task<Chat> CreateChatAsync(Chat chat)
+        {
             await _context.Chat.AddAsync(chat);
             await _context.SaveChangesAsync();
             return chat;
+        }
+
+        public async Task<UserChat> CreateAssociationAsync(UserChat userChat)
+        {
+            await _context.UserChats.AddAsync(userChat);
+            await _context.SaveChangesAsync();
+            return userChat;
         }
 
 

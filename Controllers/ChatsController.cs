@@ -26,19 +26,6 @@ namespace DashApi.Controllers
         }
 
 
-        // get all chats
-        // [HttpGet]
-        // public async Task<IActionResult> GetAllChats()
-        // {
-        //     if(!ModelState.IsValid){ return BadRequest(ModelState); }
-
-        //     var chats = await _chatRepo.GetAllAsync();
-        //     var chatsDto = chats.Select(chat => chat.ToChatDto());
-
-        //     return Ok(chatsDto);
-        // }
-
-
         // get user specific chats
         [HttpGet]
         [Authorize]
@@ -75,16 +62,38 @@ namespace DashApi.Controllers
         [Authorize]
         public async Task<IActionResult> CreateChat([FromBody] CreateChatDto dto)
         {
-            if(!ModelState.IsValid){ return BadRequest(ModelState); }
+            if (!ModelState.IsValid) 
+            { 
+                return BadRequest(ModelState); 
+            }
+
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) 
+            { 
+                return BadRequest("User not found"); 
+            }
 
             var chat = dto.ToChatFromCreate();
             await _chatRepo.CreateChatAsync(chat);
 
+            var association = new UserChat
+            {
+                ChatId = chat.Id,
+                UserId = user.Id,
+            };
+
+            var res = await _chatRepo.CreateAssociationAsync(association);
+            if (res == null)
+            {
+                return StatusCode(500, "Could not create user chat association");
+            }
+
             return CreatedAtAction
             (
-                nameof(GetChatById),
-                new {id = chat.Id},
-                chat
+                nameof(GetChatById), 
+                new {id = chat.Id}, 
+                chat.ToChatDto()
             );
         }
 
