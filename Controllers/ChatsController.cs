@@ -26,10 +26,10 @@ namespace DashApi.Controllers
         }
 
 
-        // get user specific chats
+        // get user chats
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAllUserChats()
+        public async Task<IActionResult> GetUserChats()
         {
             var username = User.GetUsername();
             var user = await _userManager.FindByNameAsync(username);
@@ -39,7 +39,7 @@ namespace DashApi.Controllers
         }
 
 
-        // get chat by id (all)
+        // get chat by id
         [HttpGet("{id:int}")]
         [Authorize]
         public async Task<IActionResult> GetChatById([FromRoute] int id)
@@ -119,18 +119,59 @@ namespace DashApi.Controllers
         // delete chat (creator only)
         [HttpDelete]
         [Authorize]
-        [Route("{id:int}")]
+        [Route("/creator/{id:int}")]
         public async Task<IActionResult> DeleteChat([FromRoute] int id)
         {
-            if(!ModelState.IsValid){ return BadRequest(ModelState); }
-            
-            var chat = await _chatRepo.DeleteChatAsync(id);
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) 
+            { 
+                return BadRequest("User not found"); 
+            }
 
-            if(chat == null){
-                return NotFound("Chat not found");
+            var userChats = await _chatRepo.GetUserChatsAsync(user);
+            var filteredChat = userChats.Where(c => c.Id == id).ToList();
+
+            if(filteredChat.Count() == 1)
+            {
+                await _chatRepo.DeleteChatAsync(id);
+                await _chatRepo.LeaveChat(user, id);
+            }
+            else
+            {
+                return BadRequest("Chat not found");
             }
 
             return NoContent();
+        }
+
+
+        // leave chat (participant only)
+        [HttpDelete]
+        [Authorize]
+        [Route("{id:int}")]
+        public async Task<IActionResult> LeaveChat([FromRoute] int id)
+        {
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) 
+            { 
+                return BadRequest("User not found"); 
+            }
+
+            var userChats = await _chatRepo.GetUserChatsAsync(user);
+            var filteredChat = userChats.Where(c => c.Id == id).ToList();
+            
+            if(filteredChat.Count() == 1)
+            {
+                await _chatRepo.LeaveChat(user, id);
+            }
+            else
+            {
+                return BadRequest("Chat not found");
+            }
+
+            return Ok();
         }
     }
 }

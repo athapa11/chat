@@ -82,5 +82,17 @@ namespace DashApi.Repository
         {
             return await _context.Chat.AnyAsync(s => s.Id == id);
         }
+
+        public async Task<UserChat?> LeaveChat(User user, int id)
+        {
+            var userChats = await _context.UserChats.FirstOrDefaultAsync(u => u.UserId == user.Id && u.Chat.Id == id);
+
+            if(userChats == null){ return null; }
+
+            _context.UserChats.Remove(userChats);
+            await _context.SaveChangesAsync();
+
+            return userChats;
+        }
     }
 }

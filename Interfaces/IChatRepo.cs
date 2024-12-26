@@ -13,8 +13,7 @@ namespace DashApi.Interfaces
         Task<List<Chat>> GetUserChatsAsync(User user);
 
         Task<Chat?> GetByIdAsync(int id);
-
-        Task<UserChat> CreateAssociationAsync(UserChat userChat);
+        
         Task<Chat> CreateChatAsync(Chat chat);
 
         Task<Chat?> EditChatAsync(int id, Chat chat);
@@ -22,5 +21,9 @@ namespace DashApi.Interfaces
         Task<Chat?> DeleteChatAsync(int id);
 
         Task<bool> ChatExists(int id);
+
+        Task<UserChat> CreateAssociationAsync(UserChat userChat);
+
+        Task<UserChat> LeaveChat(User user, int id);
     }
 }
